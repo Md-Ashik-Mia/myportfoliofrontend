@@ -1,0 +1,47 @@
+@import "tailwindcss";
+
+:root {
+  --background: #050814;
+  --foreground: #f5f7ff;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  min-height: 100vh;
+  background-image:
+    radial-gradient(circle at top, rgba(35, 66, 255, 0.2), transparent 30%),
+    radial-gradient(circle at 80% 20%, rgba(16, 185, 255, 0.12), transparent 25%),
+    linear-gradient(180deg, #050814 0%, #060913 52%, #04060f 100%);
+}
+
+@keyframes float-slow {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(0, -10px, 0) scale(1.02);
+  }
+}
+
+.animate-float-slow {
+  animation: float-slow 8s ease-in-out infinite;
+}
+
+.admin-auth-input:-webkit-autofill,
+.admin-auth-input:-webkit-autofill:hover,
+.admin-auth-input:-webkit-autofill:focus,
+.admin-auth-input:-webkit-autofill:active {
+  -webkit-text-fill-color: #f5f7ff;
+  transition: background-color 9999s ease-in-out 0s;
+  -webkit-box-shadow: 0 0 0 1000px transparent inset;
+}
