@@ -117,11 +117,12 @@ export default function ProjectSection() {
           {projects.map((project) => (
             <GsapCard3DTilt key={project._id} maxTilt={5}>
               <NoiseCard
-                className="h-[500px] rounded-[22px] border border-[#164962] px-4 py-4 shadow-[0_12px_40px_rgba(0,0,0,0.18)] sm:px-6 flex flex-col justify-between transition-all duration-300 hover:border-[#2f62ff]/50 hover:shadow-[0_20px_60px_rgba(47,98,255,0.25)] transform-gpu"
+                className="min-h-[460px] h-full sm:h-[500px] rounded-[22px] border border-[#164962] px-4 py-4 shadow-[0_12px_40px_rgba(0,0,0,0.18)] sm:px-6 flex flex-col justify-between transition-all duration-300 hover:border-[#2f62ff]/50 hover:shadow-[0_20px_60px_rgba(47,98,255,0.25)] transform-gpu"
                 bgColor="bg-[#08101F]"
                 noiseOpacity={0.09}
                 grainSize={1}
               >
+
                 <div className="flex flex-col h-full justify-between">
                   <div>
                     <ProjectPreview project={project} />

@@ -130,9 +130,10 @@ export default function ContactSection() {
   /* Shared transparent input style — noise comes from the NoiseCard wrapper */
   const baseInput = `
     w-full bg-transparent outline-none
-    text-sm text-white/80 placeholder-white/25
+    text-base sm:text-sm text-white/80 placeholder-white/25
     px-3 pt-[10px] pb-[10px]
   `;
+
 
   return (
     <div id="contact" className="py-24 flex items-center justify-center px-4 sm:px-6 md:px-8">
