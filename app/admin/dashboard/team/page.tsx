@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from "react";
 import { FiPlus, FiEdit, FiTrash2, FiSave, FiX, FiUsers, FiTwitter, FiInstagram, FiFacebook } from "react-icons/fi";
+import ImgBBUploader from "@/common/admin/ImgBBUploader";
+
 
 interface TeamMember {
   _id: string;
@@ -256,17 +258,13 @@ export default function AdminTeamPage() {
             />
           </div>
 
-          <div>
-            <label className="block text-xs uppercase tracking-wider text-white/45 mb-1.5 font-medium">Image URL</label>
-            <input
-              type="url"
-              placeholder="https://images.unsplash.com/... or postimg"
-              value={imageUrl}
-              onChange={(e) => setImageUrl(e.target.value)}
-              className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white outline-none focus:border-[#2f62ff]/50 focus:bg-white/[0.06] transition"
-              required
-            />
-          </div>
+          <ImgBBUploader
+            value={imageUrl}
+            onChange={(url) => setImageUrl(url)}
+            label="Member Photo (Upload to ImgBB)"
+            placeholder="Upload image or paste link"
+          />
+
 
           <div className="border-t border-white/5 pt-4">
             <h4 className="text-xs font-semibold text-white/45 uppercase tracking-wider mb-3">Social Handles (Optional)</h4>

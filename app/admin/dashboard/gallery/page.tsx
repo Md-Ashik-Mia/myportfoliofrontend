@@ -2,6 +2,8 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { FiPlus, FiEdit, FiTrash2, FiSave, FiX, FiImage, FiVideo, FiPlay } from "react-icons/fi";
+import ImgBBUploader from "@/common/admin/ImgBBUploader";
+
 
 interface GalleryItem {
   _id: string;
@@ -270,17 +272,27 @@ export default function AdminGalleryPage() {
             </select>
           </div>
 
-          <div>
-            <label className="block text-xs uppercase tracking-wider text-white/45 mb-1.5 font-medium">Media Source URL</label>
-            <input
-              type="url"
-              placeholder={type === "video" ? "https://assets.mixkit.co/... .mp4" : "https://images.unsplash.com/... "}
+          {type === "image" ? (
+            <ImgBBUploader
               value={mediaUrl}
-              onChange={(e) => setMediaUrl(e.target.value)}
-              className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white outline-none focus:border-[#2f62ff]/50 focus:bg-white/[0.06] transition"
-              required
+              onChange={(url) => setMediaUrl(url)}
+              label="Gallery Image (Upload to ImgBB)"
+              placeholder="Upload photo or paste ImgBB link"
             />
-          </div>
+          ) : (
+            <div>
+              <label className="block text-xs uppercase tracking-wider text-white/45 mb-1.5 font-medium">Video Source URL</label>
+              <input
+                type="url"
+                placeholder="https://assets.mixkit.co/... .mp4"
+                value={mediaUrl}
+                onChange={(e) => setMediaUrl(e.target.value)}
+                className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white outline-none focus:border-[#2f62ff]/50 focus:bg-white/[0.06] transition"
+                required
+              />
+            </div>
+          )}
+
 
           {formError && (
             <p className="text-rose-400 text-xs font-semibold">{formError}</p>
