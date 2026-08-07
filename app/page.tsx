@@ -1,4 +1,5 @@
 import HeroSection from "@/common/home/HeroSection";
+import AboutSection from "@/common/home/AboutSection";
 import ProjectSection from "@/common/home/ProjectSection";
 import CommunitySection from "@/common/home/CommunitySection";
 import GallerySection from "@/common/home/GallerySection";
@@ -19,6 +20,7 @@ export default function Home() {
       >
        <div className="mx-auto max-w-[1440px]  ">
          <HeroSection />
+         <AboutSection />
          <ProjectSection />
          <CommunitySection />
          <GallerySection />
@@ -31,3 +33,4 @@ export default function Home() {
     </main>
   );
 }
+
