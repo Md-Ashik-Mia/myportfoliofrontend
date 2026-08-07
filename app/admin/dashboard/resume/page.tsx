@@ -1,8 +1,8 @@
 'use client';
 
 import { useState, useEffect, type ChangeEvent } from 'react';
-import AdminShell from '@/common/admin/AdminShell';
 import { FiUploadCloud, FiFileText, FiCheckCircle, FiExternalLink, FiRefreshCw, FiAlertCircle, FiTrash2 } from 'react-icons/fi';
+
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:5000';
 
@@ -150,8 +150,8 @@ export default function AdminResumePage() {
   };
 
   return (
-    <AdminShell>
-      <div className="mx-auto max-w-4xl space-y-8">
+    <div className="mx-auto max-w-4xl space-y-8">
+
         {/* Page Header */}
         <div className="flex items-center justify-between">
           <div>
@@ -306,6 +306,7 @@ export default function AdminResumePage() {
           </div>
         </div>
       </div>
-    </AdminShell>
   );
 }
+
+
