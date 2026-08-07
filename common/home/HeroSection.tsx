@@ -1,6 +1,8 @@
 'use client';
 
-import { useState, type ReactNode } from 'react';
+import { useState, useEffect, type ReactNode } from 'react';
+
+
 import { AiOutlineDownload } from 'react-icons/ai';
 import { FaFacebookF, FaInstagram, FaLinkedinIn, FaTwitter } from 'react-icons/fa6';
 import { FiArrowRight, FiMenu, FiX } from 'react-icons/fi';
@@ -101,9 +103,34 @@ function NoiseActionButton({
   );
 }
 
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:5000';
+
 export default function HeroSection() {
   const { data: session } = useSession();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [resumeUrl, setResumeUrl] = useState('/pdf/MyResume Ashik.pdf');
+  const [resumeFileName, setResumeFileName] = useState('MyResume Ashik.pdf');
+
+  useEffect(() => {
+    const fetchResume = async () => {
+      try {
+        const res = await fetch(`${API_BASE_URL}/api/resume`);
+        if (res.ok) {
+          const json = await res.json();
+          if (json.data && json.data.fileUrl) {
+            setResumeUrl(json.data.fileUrl);
+            if (json.data.fileName) {
+              setResumeFileName(json.data.fileName);
+            }
+          }
+        }
+      } catch (e) {
+        console.error('Failed to fetch dynamic resume from Atlas:', e);
+      }
+    };
+    void fetchResume();
+  }, []);
+
 
   return (
     <div className="flex flex-col lg:min-h-[calc(100vh-1.5rem)]">
@@ -293,12 +320,13 @@ export default function HeroSection() {
 
           <div className="mt-8 flex flex-wrap gap-4">
             <ShimmerButton
-              href="/pdf/MyResume Ashik.pdf"
+              href={resumeUrl}
               target="_blank"
-              download="MyResume Ashik.pdf"
+              download={resumeFileName}
               text="Resume"
               icon={<AiOutlineDownload className="text-xl" />}
             />
+
 
             <a
               href="#projects"

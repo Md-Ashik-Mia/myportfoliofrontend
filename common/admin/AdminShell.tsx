@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState, type ReactNode } from 'react';
 import { signOut, useSession } from 'next-auth/react';
-import { FiDollarSign, FiGrid, FiLogOut, FiUploadCloud, FiBox, FiShield, FiUsers, FiImage, FiMessageSquare, FiHelpCircle } from 'react-icons/fi';
+import { FiDollarSign, FiGrid, FiLogOut, FiUploadCloud, FiBox, FiShield, FiUsers, FiImage, FiMessageSquare, FiHelpCircle, FiFileText } from 'react-icons/fi';
 
 const navItems = [
   { href: '/admin/dashboard', label: 'Overview', icon: FiGrid },
@@ -13,8 +13,10 @@ const navItems = [
   { href: '/admin/dashboard/gallery', label: 'Gallery', icon: FiImage },
   { href: '/admin/dashboard/community', label: 'Testimonials', icon: FiMessageSquare },
   { href: '/admin/dashboard/faq', label: 'FAQs', icon: FiHelpCircle },
+  { href: '/admin/dashboard/resume', label: 'Resume PDF', icon: FiFileText },
   { href: '/admin/dashboard/salary-pricing', label: 'Salary Pricing', icon: FiDollarSign },
 ];
+
 
 const AUTH_KEY = 'admin-auth';
 const TOKEN_KEY = 'admin-token';
