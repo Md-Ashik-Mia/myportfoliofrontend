@@ -115,58 +115,63 @@ export default function HeroSection() {
         grainSize={1}
       >
         <header className="flex items-center justify-between gap-4">
+          {/* Logo & Brand */}
           <div className="flex items-center gap-3">
-            <Image src="/logo/ashiklogo.png" width={46} height={46} alt="logo" className="w-10 h-10 sm:w-12 sm:h-12" />
-            <div className="text-[1.4rem] font-bold leading-none tracking-[-0.03em] text-white sm:text-[1.8rem]">
+            <div className="relative group cursor-pointer">
+              <div className="absolute -inset-1 rounded-full bg-gradient-to-r from-cyan-500 to-blue-600 blur opacity-40 group-hover:opacity-100 transition duration-500" />
+              <Image src="/logo/ashiklogo.png" width={44} height={44} alt="logo" className="relative w-10 h-10 sm:w-11 sm:h-11" />
+            </div>
+            <div className="text-[1.35rem] font-extrabold leading-none tracking-[-0.03em] text-white sm:text-[1.65rem] flex items-center">
               It&apos;s ashik
+              <span className="ml-1.5 h-2 w-2 rounded-full bg-cyan-400 animate-pulse" />
             </div>
           </div>
 
-          {/* Desktop Navigation */}
-          <nav className="hidden items-center gap-2 md:flex">
-            {navItems.map((item) => (
-              <a key={item.label} href={item.href}>
-                <NoiseBadge className="px-4 py-2 text-[11px] font-medium text-white/70 transition hover:-translate-y-0.5 hover:text-white">
+          {/* Desktop Floating Pill Navigation Bar */}
+          <nav className="hidden items-center gap-3 md:flex">
+            <div className="flex items-center gap-1.5 rounded-full border border-white/10 bg-[#070b19]/80 px-2 py-1.5 shadow-[0_10px_30px_rgba(0,0,0,0.4)] backdrop-blur-xl">
+              {navItems.map((item) => (
+                <a
+                  key={item.label}
+                  href={item.href}
+                  className="px-3.5 py-1.5 text-xs font-medium text-white/70 transition-all duration-300 rounded-full hover:text-white hover:bg-white/10 hover:shadow-[0_0_15px_rgba(255,255,255,0.08)]"
+                >
                   {item.label}
-                </NoiseBadge>
-              </a>
-            ))}
+                </a>
+              ))}
+            </div>
 
+            {/* Auth / Profile Pill */}
             {session?.user ? (
-              <div className="flex items-center gap-2">
-                <NoiseBadge className="px-3 py-1 text-xs text-white/80 flex items-center gap-2">
-                  {session.user.image && (
-                    <img src={session.user.image} alt="User" className="w-5 h-5 rounded-full" />
-                  )}
-                  <span>{session.user.name?.split(' ')[0]}</span>
-                </NoiseBadge>
-                <NoiseActionButton
-                  ariaLabel="Sign out"
-                  className="text-[11px] font-medium text-white/72 transition hover:-translate-y-0.5 hover:text-white"
+              <div className="flex items-center gap-2 rounded-full border border-white/10 bg-[#070b19]/80 px-3 py-1.5 backdrop-blur-xl">
+                {session.user.image && (
+                  <img src={session.user.image} alt="User" className="w-5 h-5 rounded-full border border-white/20" />
+                )}
+                <span className="text-xs font-semibold text-white/90">{session.user.name?.split(' ')[0]}</span>
+                <button
                   onClick={() => void signOut()}
+                  className="ml-1 text-[11px] font-medium text-red-400 hover:text-red-300 transition"
                 >
                   Logout
-                </NoiseActionButton>
+                </button>
               </div>
             ) : (
-              <NoiseActionButton
-                ariaLabel="Sign in with Google"
-                className="text-[11px] font-medium text-white/72 transition hover:-translate-y-0.5 hover:text-white"
+              <button
                 onClick={() => void signIn('google', { callbackUrl: '/' })}
+                className="flex items-center gap-2 rounded-full border border-white/10 bg-[#070b19]/80 px-4 py-2 text-xs font-medium text-white/80 backdrop-blur-xl transition duration-300 hover:border-white/20 hover:text-white hover:bg-white/10"
               >
-                <SiGoogle className="text-[11px]" />
-                Google Login
-              </NoiseActionButton>
+                <SiGoogle className="text-cyan-400 text-xs" />
+                <span>Google Login</span>
+              </button>
             )}
 
-            <NoiseActionButton
-              className="text-sm font-semibold text-white transition hover:-translate-y-0.5"
-              onClick={() => {
-                window.location.hash = 'contact';
-              }}
+            {/* Hire Me CTA Button */}
+            <a
+              href="#contact"
+              className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-500 px-5 py-2 text-xs font-bold text-white shadow-[0_0_20px_rgba(37,99,235,0.35)] transition-all duration-300 hover:scale-105 hover:shadow-[0_0_25px_rgba(6,182,212,0.5)] active:scale-95"
             >
               Hire Me
-            </NoiseActionButton>
+            </a>
           </nav>
 
           {/* Mobile Hamburger Menu Trigger */}
@@ -231,12 +236,13 @@ export default function HeroSection() {
             <a
               href="#contact"
               onClick={() => setMobileMenuOpen(false)}
-              className="flex w-full items-center justify-center rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 py-3 text-sm font-bold text-white shadow-lg active:scale-95 transition"
+              className="flex w-full items-center justify-center rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-500 py-3 text-sm font-bold text-white shadow-lg active:scale-95 transition"
             >
               Hire Me
             </a>
           </div>
         )}
+
       </NoiseCard>
 
       {/* Main Hero Content Grid */}
