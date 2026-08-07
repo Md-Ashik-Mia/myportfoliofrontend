@@ -4,7 +4,8 @@ import { useState, useEffect, type ReactNode } from 'react';
 
 
 import { AiOutlineDownload } from 'react-icons/ai';
-import { FaFacebookF, FaInstagram, FaLinkedinIn, FaTwitter } from 'react-icons/fa6';
+import { FaFacebookF, FaInstagram, FaLinkedinIn, FaTwitter, FaYoutube, FaGithub } from 'react-icons/fa6';
+
 import { FiArrowRight, FiMenu, FiX } from 'react-icons/fi';
 import { SiGoogle } from 'react-icons/si';
 import { signIn, signOut, useSession } from 'next-auth/react';
@@ -110,6 +111,21 @@ export default function HeroSection() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [resumeUrl, setResumeUrl] = useState<string>('');
   const [resumeFileName, setResumeFileName] = useState<string>('Resume.pdf');
+  const [socialLinks, setSocialLinks] = useState<{
+    facebook?: string;
+    linkedin?: string;
+    instagram?: string;
+    youtube?: string;
+    github?: string;
+    twitter?: string;
+  }>({
+    facebook: '',
+    linkedin: '',
+    instagram: '',
+    youtube: '',
+    github: '',
+    twitter: '',
+  });
 
   useEffect(() => {
     const fetchResume = async () => {
@@ -128,8 +144,25 @@ export default function HeroSection() {
         console.error('Failed to fetch dynamic resume from Atlas:', e);
       }
     };
+
+    const fetchSocials = async () => {
+      try {
+        const res = await fetch(`${API_BASE_URL}/api/social-links`);
+        if (res.ok) {
+          const json = await res.json();
+          if (json.data) {
+            setSocialLinks(json.data);
+          }
+        }
+      } catch (e) {
+        console.error('Failed to fetch social links:', e);
+      }
+    };
+
     void fetchResume();
+    void fetchSocials();
   }, []);
+
 
 
 
@@ -311,13 +344,40 @@ export default function HeroSection() {
           </div>
 
           <div className="mt-6 sm:mt-8 flex flex-wrap items-center gap-4">
-            <div className="flex items-center gap-3">
-              <SocialIcon icon={<FaFacebookF size={16} />} />
-              <SocialIcon icon={<FaInstagram size={16} />} />
-              <SocialIcon icon={<FaTwitter size={16} />} />
-              <SocialIcon icon={<FaLinkedinIn size={16} />} />
+            <div className="flex flex-wrap items-center gap-3">
+              {Boolean(socialLinks.facebook?.trim()) && (
+                <a href={socialLinks.facebook} target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+                  <SocialIcon icon={<FaFacebookF size={16} />} />
+                </a>
+              )}
+              {Boolean(socialLinks.linkedin?.trim()) && (
+                <a href={socialLinks.linkedin} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+                  <SocialIcon icon={<FaLinkedinIn size={16} />} />
+                </a>
+              )}
+              {Boolean(socialLinks.instagram?.trim()) && (
+                <a href={socialLinks.instagram} target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+                  <SocialIcon icon={<FaInstagram size={16} />} />
+                </a>
+              )}
+              {Boolean(socialLinks.youtube?.trim()) && (
+                <a href={socialLinks.youtube} target="_blank" rel="noopener noreferrer" aria-label="YouTube">
+                  <SocialIcon icon={<FaYoutube size={16} />} />
+                </a>
+              )}
+              {Boolean(socialLinks.github?.trim()) && (
+                <a href={socialLinks.github} target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+                  <SocialIcon icon={<FaGithub size={16} />} />
+                </a>
+              )}
+              {Boolean(socialLinks.twitter?.trim()) && (
+                <a href={socialLinks.twitter} target="_blank" rel="noopener noreferrer" aria-label="Twitter">
+                  <SocialIcon icon={<FaTwitter size={16} />} />
+                </a>
+              )}
             </div>
           </div>
+
 
           <div className="mt-8 flex flex-wrap gap-4">
             <ShimmerButton
