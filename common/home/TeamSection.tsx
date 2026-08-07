@@ -2,7 +2,8 @@
 
 import React, { useState, useEffect } from "react";
 import AuroraView from "../auroratext/Auroratext";
-import { GsapReveal, GsapStagger } from "../gsap/GsapAnimations";
+import { GsapReveal, GsapStagger, GsapCard3DTilt } from "../gsap/GsapAnimations";
+
 
 type TeamMember = {
   _id?: string;
@@ -161,9 +162,12 @@ export default function TeamSection() {
 
       <GsapStagger className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 w-full px-4 sm:px-6 md:px-8 max-w-[1400px]">
         {members.map((member) => (
-          <TeamMemberCard key={member._id || member.name} member={member} />
+          <GsapCard3DTilt key={member._id || member.name} maxTilt={6}>
+            <TeamMemberCard member={member} />
+          </GsapCard3DTilt>
         ))}
       </GsapStagger>
+
     </div>
   );
 }

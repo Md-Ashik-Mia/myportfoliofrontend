@@ -4,6 +4,8 @@ import React, { useState } from "react";
 import NoiseCard from "@/common/noise-card/NoiseCard";
 import AuroraView from "../auroratext/Auroratext";
 import { SiWhatsapp } from "react-icons/si";
+import { GsapReveal, GsapCard3DTilt } from "../gsap/GsapAnimations";
+
 
 interface FormData {
   name: string;
@@ -137,14 +139,17 @@ export default function ContactSection() {
       <div className="w-full max-w-[808px]">
 
         {/* Heading */}
-        <div className="text-center mb-10">
-          <h2 className="text-4xl sm:text-5xl font-bold tracking-tight text-white">
-             <AuroraView normaltext="Let's " highlighttext="connect" />
-          </h2>
-          <p className="mt-3 text-white/40 text-sm sm:text-base">
-            Send me a Direct message or chat instantly on WhatsApp
-          </p>
-        </div>
+        <GsapReveal direction="up">
+          <div className="text-center mb-10">
+            <h2 className="text-4xl sm:text-5xl font-bold tracking-tight text-white">
+               <AuroraView normaltext="Let's " highlighttext="connect" />
+            </h2>
+            <p className="mt-3 text-white/40 text-sm sm:text-base">
+              Send me a Direct message or chat instantly on WhatsApp
+            </p>
+          </div>
+        </GsapReveal>
+
 
         {sent ? (
           <div className="text-center py-12 px-6 rounded-3xl border border-white/10 bg-white/[0.02] flex flex-col items-center gap-6">

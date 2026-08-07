@@ -4,7 +4,8 @@ import React, { useState, useEffect } from "react";
 import AuroraView from "../auroratext/Auroratext";
 import NoiseCard from "../noise-card/NoiseCard";
 import ShimmerButton from "./ShimmerButton";
-import { GsapReveal, GsapStagger } from "../gsap/GsapAnimations";
+import { GsapReveal, GsapStagger, GsapCard3DTilt } from "../gsap/GsapAnimations";
+
 import { FiPlay, FiExternalLink, FiCode } from "react-icons/fi";
 
 interface Project {
@@ -114,47 +115,49 @@ export default function ProjectSection() {
       ) : (
         <GsapStagger className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full px-4 sm:px-6 md:px-8 max-w-[1400px]">
           {projects.map((project) => (
-            <NoiseCard
-              key={project._id}
-              className="h-[500px] rounded-[22px] border border-[#164962] px-4 py-4 shadow-[0_12px_40px_rgba(0,0,0,0.18)] sm:px-6 flex flex-col justify-between transition-all duration-300 hover:-translate-y-2 hover:border-[#2f62ff]/50 hover:shadow-[0_20px_60px_rgba(47,98,255,0.25)] transform-gpu"
-              bgColor="bg-[#08101F]"
-              noiseOpacity={0.09}
-              grainSize={1}
-            >
-              <div className="flex flex-col h-full justify-between">
-                <div>
-                  <ProjectPreview project={project} />
+            <GsapCard3DTilt key={project._id} maxTilt={5}>
+              <NoiseCard
+                className="h-[500px] rounded-[22px] border border-[#164962] px-4 py-4 shadow-[0_12px_40px_rgba(0,0,0,0.18)] sm:px-6 flex flex-col justify-between transition-all duration-300 hover:border-[#2f62ff]/50 hover:shadow-[0_20px_60px_rgba(47,98,255,0.25)] transform-gpu"
+                bgColor="bg-[#08101F]"
+                noiseOpacity={0.09}
+                grainSize={1}
+              >
+                <div className="flex flex-col h-full justify-between">
+                  <div>
+                    <ProjectPreview project={project} />
 
-                  <div className="flex justify-between items-start mt-4 gap-2">
-                    <h3 className="text-white text-lg font-bold leading-tight line-clamp-1">{project.title}</h3>
-                    <span className="text-[#a0c4ff] text-xs px-2.5 py-1 rounded-full border border-[#164962] bg-[#0a1929]/55 whitespace-nowrap">{project.type}</span>
+                    <div className="flex justify-between items-start mt-4 gap-2">
+                      <h3 className="text-white text-lg font-bold leading-tight line-clamp-1">{project.title}</h3>
+                      <span className="text-[#a0c4ff] text-xs px-2.5 py-1 rounded-full border border-[#164962] bg-[#0a1929]/55 whitespace-nowrap">{project.type}</span>
+                    </div>
+                    <p className="mt-2.5 text-sm text-[#94a3b8] line-clamp-3 leading-relaxed">
+                      {project.description}
+                    </p>
                   </div>
-                  <p className="mt-2.5 text-sm text-[#94a3b8] line-clamp-3 leading-relaxed">
-                    {project.description}
-                  </p>
-                </div>
 
-                <div className="mt-4 flex justify-between items-center gap-4">
-                  {project.codeUrl ? (
-                    <ShimmerButton href={project.codeUrl} text="Code" icon="" />
-                  ) : (
-                    <div className="w-32 h-12" />
-                  )}
-                  {project.liveUrl && (
-                    <a
-                      href={project.liveUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex h-12 items-center gap-2 rounded-xl bg-[#194BFB] px-8 text-sm font-semibold text-white shadow-[0_10px_30px_rgba(47,98,255,0.35)] transition duration-300 hover:-translate-y-0.5 hover:bg-[#3d73ff] hover:shadow-[0_12px_40px_rgba(47,98,255,0.5)]"
-                    >
-                      Live <FiExternalLink size={14} />
-                    </a>
-                  )}
+                  <div className="mt-4 flex justify-between items-center gap-4">
+                    {project.codeUrl ? (
+                      <ShimmerButton href={project.codeUrl} text="Code" icon="" />
+                    ) : (
+                      <div className="w-32 h-12" />
+                    )}
+                    {project.liveUrl && (
+                      <a
+                        href={project.liveUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex h-12 items-center gap-2 rounded-xl bg-[#194BFB] px-8 text-sm font-semibold text-white shadow-[0_10px_30px_rgba(47,98,255,0.35)] transition duration-300 hover:-translate-y-0.5 hover:bg-[#3d73ff] hover:shadow-[0_12px_40px_rgba(47,98,255,0.5)]"
+                      >
+                        Live <FiExternalLink size={14} />
+                      </a>
+                    )}
+                  </div>
                 </div>
-              </div>
-            </NoiseCard>
+              </NoiseCard>
+            </GsapCard3DTilt>
           ))}
         </GsapStagger>
+
       )}
     </div>
   );

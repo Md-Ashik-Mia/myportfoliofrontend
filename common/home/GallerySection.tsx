@@ -3,9 +3,11 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import AuroraView from '../auroratext/Auroratext';
-import { GsapReveal, GsapStagger } from '../gsap/GsapAnimations';
+import { GsapReveal, GsapStagger, GsapCard3DTilt } from '../gsap/GsapAnimations';
+
 
 // --- TypeScript Interfaces ---
+
 interface GalleryItem {
   _id?: string;
   id?: number;
@@ -135,11 +137,16 @@ const MasonryGrid: React.FC<{ items: GalleryItem[] }> = ({ items }) => {
       className="columns-1 gap-6 sm:columns-2 lg:columns-3 w-full"
     >
       {items.map((item, index) => (
-        <GridItem key={item._id || item.id || index} item={item} />
+        <div key={item._id || item.id || index} className="mb-6 break-inside-avoid">
+          <GsapCard3DTilt maxTilt={5}>
+            <GridItem item={item} />
+          </GsapCard3DTilt>
+        </div>
       ))}
     </GsapStagger>
   );
 };
+
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:5000";
 

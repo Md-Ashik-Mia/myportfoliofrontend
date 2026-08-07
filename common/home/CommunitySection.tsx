@@ -6,8 +6,11 @@ import { useSession, signIn } from "next-auth/react";
 import AuroraView from "../auroratext/Auroratext";
 import { FiPlus, FiX, FiCheckCircle, FiStar } from "react-icons/fi";
 import { SiGoogle } from "react-icons/si";
+import { GsapReveal, GsapStagger, GsapCard3DTilt } from "../gsap/GsapAnimations";
+
 
 interface Testimonial {
+
   _id?: string;
   id?: string;
   name: string;
@@ -197,10 +200,14 @@ export default function CommunitySection() {
 
   return (
     <div id="community" className="min-h-screen py-24 flex flex-col items-center justify-center">
-      <AuroraView normaltext="Loved" highlighttext="by community" />
-      <p className="text-white/45 text-center text-sm sm:text-base max-w-[60ch] mt-4 px-4">
-        I like exploring and learning new things. I build web platforms to test out new concepts and gather feedback.
-      </p>
+      <GsapReveal direction="up">
+        <AuroraView normaltext="Loved" highlighttext="by community" />
+      </GsapReveal>
+      <GsapReveal direction="up" delay={0.1}>
+        <p className="text-white/45 text-center text-sm sm:text-base max-w-[60ch] mt-4 px-4">
+          I like exploring and learning new things. I build web platforms to test out new concepts and gather feedback.
+        </p>
+      </GsapReveal>
 
       {/* Write Feedback Button */}
       <button
@@ -212,13 +219,16 @@ export default function CommunitySection() {
       </button>
 
       {/* Bento Grid layout */}
-      <div className="mt-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 grid-flow-row-dense w-full px-4 sm:px-6 md:px-8 max-w-[1400px]">
+      <GsapStagger className="mt-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 grid-flow-row-dense w-full px-4 sm:px-6 md:px-8 max-w-[1400px]">
         {testimonials.map((item, index) => (
           <div key={item._id || item.id || index} className={`${item.spanClass}`}>
-            <TestimonialCard item={item} />
+            <GsapCard3DTilt maxTilt={4}>
+              <TestimonialCard item={item} />
+            </GsapCard3DTilt>
           </div>
         ))}
-      </div>
+      </GsapStagger>
+
 
       {/* Feedback Submission Modal rendered via React Portal directly into body */}
       {isModalOpen && mounted && createPortal(
