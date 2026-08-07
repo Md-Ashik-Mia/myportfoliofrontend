@@ -6,9 +6,11 @@ type ShimmerButtonProps = {
   href: string;
   text: string;
   icon: ReactNode;
+  target?: string;
+  download?: boolean | string;
 };
 
-export default function ShimmerButton({ href, text, icon }: ShimmerButtonProps) {
+export default function ShimmerButton({ href, text, icon, target, download }: ShimmerButtonProps) {
   const customCss = `
     @property --angle {
       syntax: '<angle>';
@@ -40,8 +42,11 @@ export default function ShimmerButton({ href, text, icon }: ShimmerButtonProps) 
       <style>{customCss}</style>
       <a
         href={href}
+        target={target}
+        download={download}
         className="group relative inline-flex items-center justify-center overflow-hidden rounded-xl p-[1.5px]"
       >
+
         <div
           className="pointer-events-none absolute -inset-4 -z-10 rounded-[28px] blur-xl"
           style={{

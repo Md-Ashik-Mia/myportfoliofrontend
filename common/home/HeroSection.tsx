@@ -293,10 +293,13 @@ export default function HeroSection() {
 
           <div className="mt-8 flex flex-wrap gap-4">
             <ShimmerButton
-              href="#resume"
+              href="/pdf/MyResume Ashik.pdf"
+              target="_blank"
+              download="MyResume Ashik.pdf"
               text="Resume"
               icon={<AiOutlineDownload className="text-xl" />}
             />
+
             <a
               href="#projects"
               className="inline-flex h-14 items-center gap-3 rounded-xl bg-[#2f62ff] px-6 text-base sm:text-lg font-semibold text-white shadow-[0_15px_40px_rgba(47,98,255,0.35)] transition duration-300 hover:-translate-y-0.5 hover:bg-[#3d73ff] active:scale-95"
