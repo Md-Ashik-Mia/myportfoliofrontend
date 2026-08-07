@@ -73,7 +73,8 @@ export default function AdminCommunityPage() {
     if (!window.confirm("Are you sure you want to delete this feedback?")) return;
 
     // Immediately remove item locally for instant feedback
-    setFeedbacks((prev) => prev.filter((f) => f._id !== id && f.id !== id));
+    setFeedbacks((prev) => prev.filter((f) => f._id !== id));
+
 
     try {
       await fetch(`${API_BASE_URL}/api/community/${id}`, {
