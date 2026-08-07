@@ -57,7 +57,7 @@ export default function AdminShell({ children }: { children: ReactNode }) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-[#050814] text-white">
         <div className="rounded-3xl border border-white/10 bg-white/5 px-6 py-4 text-sm text-white/70 backdrop-blur">
-          Loading admin dashboard...
+          The Admin dashboard is Loading...
         </div>
       </div>
     );
