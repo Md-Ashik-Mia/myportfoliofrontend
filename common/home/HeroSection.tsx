@@ -114,13 +114,12 @@ export default function HeroSection() {
           >
             <header className="flex items-center justify-between gap-4">
               <div className="flex items-center gap-3">
-                <div className="relative h-11 w-11 overflow-hidden rounded-full border border-cyan-400/40 shadow-[0_0_20px_rgba(6,182,212,0.3)]">
-                  <Image src="/ashik-profile.jpg" fill alt="Md Ashik Mia" className="object-cover object-top" />
-                </div>
+                <Image src="/logo/ashiklogo.png" width={50} height={50} alt="logo" />
                 <div className="text-[1.6rem] font-bold leading-none tracking-[-0.03em] text-white sm:text-[1.8rem]">
                   It&apos;s ashik
                 </div>
               </div>
+
 
               <nav className="hidden items-center gap-2 md:flex">
                 {navItems.map((item) => (
