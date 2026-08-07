@@ -256,7 +256,7 @@ export default function CommunitySection() {
               <div>
                 <h3 className="text-2xl font-bold tracking-tight mb-2">Share Your Testimonial</h3>
                 <p className="text-white/50 text-xs mb-6 leading-relaxed">
-                  Leave feedback about your experience working with me. Testimonials are displayed dynamically after admin approval.
+                  Leave feedback about your experience working with me.
                 </p>
 
                 {status !== "authenticated" ? (
