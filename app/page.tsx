@@ -20,15 +20,16 @@ export default function Home() {
       >
        <div className="mx-auto max-w-[1440px]  ">
          <HeroSection />
-         <AboutSection />
          <ProjectSection />
          <CommunitySection />
          <GallerySection />
          <TeamSection />
          <FAQSection />
+         <AboutSection />
          <ContactSection />
          <FooterSection />
        </div>
+
       </NoiseCard>
     </main>
   );
