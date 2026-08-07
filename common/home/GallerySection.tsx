@@ -3,6 +3,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import AuroraView from '../auroratext/Auroratext';
+import { GsapReveal, GsapStagger } from '../gsap/GsapAnimations';
 
 // --- TypeScript Interfaces ---
 interface GalleryItem {
@@ -130,14 +131,13 @@ const GridItem: React.FC<GridItemProps> = ({ item }) => {
 // --- MasonryGrid Component ---
 const MasonryGrid: React.FC<{ items: GalleryItem[] }> = ({ items }) => {
   return (
-    <div
+    <GsapStagger
       className="columns-1 gap-6 sm:columns-2 lg:columns-3 w-full"
-      style={{ columnWidth: '320px' }}
     >
       {items.map((item, index) => (
         <GridItem key={item._id || item.id || index} item={item} />
       ))}
-    </div>
+    </GsapStagger>
   );
 };
 
@@ -172,11 +172,15 @@ export default function GallerySection() {
 
   return (
     <div className="min-h-screen py-24 flex flex-col items-center justify-center">
-      <AuroraView normaltext="G" highlighttext="allary" />
-      <p className="text-white/45 text-center text-sm sm:text-base max-w-[60ch] mt-4 px-4 mb-16">
-        I like exploring and learning new. I always build projects try out new
-        tools and concepts
-      </p>
+      <GsapReveal direction="up">
+        <AuroraView normaltext="G" highlighttext="allary" />
+      </GsapReveal>
+      
+      <GsapReveal direction="up" delay={0.15}>
+        <p className="text-white/45 text-center text-sm sm:text-base max-w-[60ch] mt-4 px-4 mb-16">
+          Moments, achievements, workshops, and milestones captured along my journey.
+        </p>
+      </GsapReveal>
       
       <div className="w-full px-4 sm:px-6 md:px-8 max-w-[1400px]">
         <main>

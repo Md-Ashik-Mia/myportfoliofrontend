@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { useSession, signIn } from "next-auth/react";
 import AuroraView from "../auroratext/Auroratext";
 import { FiPlus, FiX, FiCheckCircle, FiStar } from "react-icons/fi";
@@ -10,11 +11,11 @@ interface Testimonial {
   _id?: string;
   id?: string;
   name: string;
-  role?: string; // fallback for mapping
-  position?: string; // model field
-  avatar?: string; // model field
-  text?: string; // fallback mapping
-  feedback?: string; // model field
+  role?: string;
+  position?: string;
+  avatar?: string;
+  text?: string;
+  feedback?: string;
   spanClass?: string;
 }
 
@@ -32,7 +33,7 @@ const initialTestimonials: Testimonial[] = [
     name: "Md Moinuddin",
     position: "Product Designer",
     avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop",
-    feedback: '"Ashik shipped a high-quality MARN stack application in record time, demonstrating great skill in Next.js, Node.js, and modern UI design patterns."',
+    feedback: '"Ashik shipped a high-quality MERN stack application in record time, demonstrating great skill in Next.js, Node.js, and modern UI design patterns."',
     spanClass: "lg:col-span-2 lg:row-span-2",
   },
   {
@@ -104,6 +105,22 @@ export default function CommunitySection() {
   const [submitting, setSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [submitError, setSubmitError] = useState("");
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (isModalOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [isModalOpen]);
 
   useEffect(() => {
     const fetchTestimonials = async () => {
@@ -112,7 +129,6 @@ export default function CommunitySection() {
         if (response.ok) {
           const json = await response.json();
           if (json.data && json.data.length > 0) {
-            // Map dynamic index to grid sizes
             const mapped = json.data.map((item: Testimonial, index: number) => {
               let spanClass = "lg:col-span-1 lg:row-span-1";
               if (index % 4 === 1) spanClass = "lg:col-span-2 lg:row-span-2";
@@ -180,11 +196,10 @@ export default function CommunitySection() {
   };
 
   return (
-    <div className="min-h-screen py-24 flex flex-col items-center justify-center relative">
+    <div id="community" className="min-h-screen py-24 flex flex-col items-center justify-center">
       <AuroraView normaltext="Loved" highlighttext="by community" />
       <p className="text-white/45 text-center text-sm sm:text-base max-w-[60ch] mt-4 px-4">
-        I like exploring and learning new. I always build projects try out new
-        tools and concepts
+        I like exploring and learning new things. I build web platforms to test out new concepts and gather feedback.
       </p>
 
       {/* Write Feedback Button */}
@@ -205,24 +220,25 @@ export default function CommunitySection() {
         ))}
       </div>
 
-      {/* Feedback Submission Modal */}
-      {isModalOpen && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center px-4 bg-black/60 backdrop-blur-md">
+      {/* Feedback Submission Modal rendered via React Portal directly into body */}
+      {isModalOpen && mounted && createPortal(
+        <div className="fixed inset-0 z-[99999] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md overflow-y-auto">
           <div
-            className="w-full max-w-lg rounded-3xl border border-white/15 bg-gradient-to-br from-[#0c142c] to-[#060913] p-6 shadow-[0_30px_90px_rgba(0,0,0,0.55)] text-white relative"
+            className="w-full max-w-lg rounded-3xl border border-white/15 bg-gradient-to-br from-[#0c142c] via-[#080d1e] to-[#04060e] p-6 sm:p-8 shadow-[0_30px_90px_rgba(0,0,0,0.85)] text-white relative my-auto animate-in fade-in zoom-in-95 duration-200"
           >
             <button
               onClick={() => setIsModalOpen(false)}
-              className="absolute top-4 right-4 text-white/40 hover:text-white transition"
+              className="absolute top-5 right-5 text-white/40 hover:text-white transition p-1"
+              aria-label="Close modal"
             >
-              <FiX size={20} />
+              <FiX size={22} />
             </button>
 
             {submitSuccess ? (
               <div className="text-center py-8 flex flex-col items-center gap-4">
-                <FiCheckCircle size={52} className="text-emerald-400" />
-                <h3 className="text-xl font-bold">Feedback Submitted!</h3>
-                <p className="text-white/50 text-sm max-w-xs leading-relaxed">
+                <FiCheckCircle size={56} className="text-emerald-400" />
+                <h3 className="text-2xl font-bold">Feedback Submitted!</h3>
+                <p className="text-white/60 text-sm max-w-xs leading-relaxed">
                   Thank you! Your testimonial has been submitted successfully and is currently waiting for admin moderation.
                 </p>
               </div>
@@ -230,44 +246,44 @@ export default function CommunitySection() {
               <div>
                 <h3 className="text-2xl font-bold tracking-tight mb-2">Share Your Testimonial</h3>
                 <p className="text-white/50 text-xs mb-6 leading-relaxed">
-                  Leave a feedback about your experience working with me. Testimonials are displayed dynamically after admin approval.
+                  Leave feedback about your experience working with me. Testimonials are displayed dynamically after admin approval.
                 </p>
 
                 {status !== "authenticated" ? (
-                  <div className="text-center py-6 border border-dashed border-white/10 rounded-2xl bg-white/[0.02]">
-                    <FiStar className="text-white/20 mx-auto mb-3" size={32} />
-                    <p className="text-sm text-white/75 mb-4">Please log in with Google to submit feedback.</p>
+                  <div className="text-center py-8 px-4 border border-dashed border-white/10 rounded-2xl bg-white/[0.02]">
+                    <FiStar className="text-white/20 mx-auto mb-3" size={36} />
+                    <p className="text-sm text-white/80 mb-5">Please log in with Google to submit feedback.</p>
                     <button
-                      onClick={() => void signIn("google")}
-                      className="inline-flex items-center gap-3 rounded-xl bg-white text-black px-6 py-3 text-sm font-semibold hover:bg-white/95 transition shadow-lg"
+                      onClick={() => void signIn("google", { callbackUrl: "/#community" })}
+                      className="inline-flex items-center gap-3 rounded-xl bg-white text-black px-6 py-3.5 text-sm font-bold hover:bg-white/90 transition shadow-xl"
                     >
-                      <SiGoogle />
+                      <SiGoogle className="text-base" />
                       Login with Google
                     </button>
                   </div>
                 ) : (
                   <form onSubmit={handlePostSubmit} className="space-y-4">
                     {/* User info row */}
-                    <div className="flex items-center gap-3 rounded-2xl border border-white/5 bg-white/[0.02] p-3">
+                    <div className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.03] p-3.5">
                       <img
                         src={session.user?.image || ""}
                         alt={session.user?.name || "avatar"}
-                        className="w-10 h-10 rounded-full object-cover border border-white/10"
+                        className="w-11 h-11 rounded-full object-cover border border-white/15"
                       />
                       <div>
                         <div className="text-sm font-bold text-white leading-tight">{session.user?.name}</div>
-                        <div className="text-xs text-white/35">Google Logged In</div>
+                        <div className="text-xs text-white/40">Logged in with Google</div>
                       </div>
                     </div>
 
                     <div>
-                      <label className="block text-xs uppercase tracking-wider text-white/45 mb-2 font-medium">Your Position</label>
+                      <label className="block text-xs uppercase tracking-wider text-white/45 mb-2 font-medium">Your Position / Title</label>
                       <input
                         type="text"
                         placeholder="e.g. CEO, Senior Developer, Client"
                         value={position}
                         onChange={(e) => setPosition(e.target.value)}
-                        className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-4 py-3 text-sm text-white outline-none focus:border-[#2f62ff]/50 focus:bg-white/[0.06] transition"
+                        className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-4 py-3 text-sm text-white outline-none focus:border-[#2f62ff]/60 focus:bg-white/[0.06] transition"
                         required
                       />
                     </div>
@@ -279,7 +295,7 @@ export default function CommunitySection() {
                         placeholder="Share your experience working with me..."
                         value={feedbackText}
                         onChange={(e) => setFeedbackText(e.target.value)}
-                        className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-4 py-3 text-sm text-white outline-none focus:border-[#2f62ff]/50 focus:bg-white/[0.06] transition resize-none"
+                        className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-4 py-3 text-sm text-white outline-none focus:border-[#2f62ff]/60 focus:bg-white/[0.06] transition resize-none"
                         required
                       />
                     </div>
@@ -291,7 +307,7 @@ export default function CommunitySection() {
                     <button
                       type="submit"
                       disabled={submitting}
-                      className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-[#2f62ff] hover:bg-[#3d73ff] disabled:bg-white/10 disabled:text-white/40 disabled:cursor-not-allowed text-white text-sm font-bold py-3.5 shadow-lg shadow-[#2f62ff]/20 transition duration-200"
+                      className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-[#2f62ff] hover:bg-[#3d73ff] disabled:bg-white/10 disabled:text-white/40 disabled:cursor-not-allowed text-white text-sm font-bold py-3.5 shadow-lg shadow-[#2f62ff]/25 transition duration-200"
                     >
                       {submitting ? "Submitting..." : "Submit Feedback"}
                     </button>
@@ -300,7 +316,8 @@ export default function CommunitySection() {
               </div>
             )}
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );

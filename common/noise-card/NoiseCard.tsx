@@ -62,6 +62,13 @@ export default function NoiseCard({
       }
     };
 
+    // Synchronously set initial dimensions and draw noise immediately on mount
+    const w = container.clientWidth || window.innerWidth;
+    const h = container.clientHeight || window.innerHeight;
+    canvas.width = Math.max(1, w);
+    canvas.height = Math.max(1, h);
+    drawNoise();
+
     const loop = () => {
       drawNoise();
       animationFrameId = requestAnimationFrame(loop);
@@ -70,9 +77,11 @@ export default function NoiseCard({
     const resizeObserver = new ResizeObserver((entries) => {
       for (const entry of entries) {
         const { width, height } = entry.contentRect;
-        canvas.width = Math.max(1, Math.floor(width));
-        canvas.height = Math.max(1, Math.floor(height));
-        drawNoise();
+        if (width > 0 && height > 0) {
+          canvas.width = Math.floor(width);
+          canvas.height = Math.floor(height);
+          drawNoise();
+        }
       }
     });
 
@@ -80,8 +89,6 @@ export default function NoiseCard({
 
     if (animated) {
       loop();
-    } else {
-      drawNoise();
     }
 
     return () => {

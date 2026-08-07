@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import AuroraView from "../auroratext/Auroratext";
+import { GsapReveal, GsapStagger } from "../gsap/GsapAnimations";
 
 type TeamMember = {
   _id?: string;
@@ -57,13 +58,10 @@ const FacebookIcon = () => (
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:5000";
 
-const TeamMemberCard: React.FC<{ member: TeamMember; index: number }> = ({ member, index }) => {
+const TeamMemberCard: React.FC<{ member: TeamMember }> = ({ member }) => {
   return (
     <div
-      className="group flex flex-col items-center text-center p-6 rounded-[22px] border border-[#164962] bg-transparent transition-all duration-300 hover:-translate-y-1.5 hover:border-[#2f8dbd] hover:shadow-[0_20px_50px_rgba(22,73,98,0.25)]"
-      style={{
-        animationDelay: `${index * 0.08}s`,
-      }}
+      className="group flex flex-col items-center text-center p-6 rounded-[22px] border border-[#164962] bg-transparent transition-all duration-300 hover:-translate-y-2 hover:border-[#2f62ff]/50 hover:shadow-[0_20px_50px_rgba(47,98,255,0.25)]"
     >
       <div className="relative w-28 h-28 md:w-32 md:h-32 mb-5">
         <div className="absolute -inset-1 rounded-full bg-gradient-to-br from-cyan-400/30 via-blue-500/30 to-violet-500/30 opacity-0 group-hover:opacity-100 blur-sm transition-opacity duration-300" />
@@ -132,7 +130,6 @@ export default function TeamSection() {
         const response = await fetch(`${API_BASE_URL}/api/team`);
         if (response.ok) {
           const json = await response.json();
-          // Fall back to original mock list if DB yields empty result
           if (json.data && json.data.length > 0) {
             setMembers(json.data);
           } else {
@@ -152,18 +149,21 @@ export default function TeamSection() {
 
   return (
     <div className="min-h-screen py-24 flex flex-col items-center justify-center">
-      <AuroraView normaltext="Our" highlighttext="Exceptional Team" />
+      <GsapReveal direction="up">
+        <AuroraView normaltext="Our" highlighttext="Exceptional Team" />
+      </GsapReveal>
 
-      <p className="text-white/45 text-center text-sm sm:text-base max-w-[60ch] mt-4 px-4 mb-16">
-        Meet our outstanding team — a synergy of talent, creativity, and
-        dedication, crafting success together with passion and innovation.
-      </p>
+      <GsapReveal direction="up" delay={0.15}>
+        <p className="text-white/45 text-center text-sm sm:text-base max-w-[60ch] mt-4 px-4 mb-16">
+          Meet our outstanding team — a synergy of talent, creativity, and dedication, crafting success together with passion and innovation.
+        </p>
+      </GsapReveal>
 
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 w-full px-4 sm:px-6 md:px-8 max-w-[1400px]">
-        {members.map((member, index) => (
-          <TeamMemberCard key={member._id || member.name} member={member} index={index} />
+      <GsapStagger className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 w-full px-4 sm:px-6 md:px-8 max-w-[1400px]">
+        {members.map((member) => (
+          <TeamMemberCard key={member._id || member.name} member={member} />
         ))}
-      </div>
+      </GsapStagger>
     </div>
   );
 }

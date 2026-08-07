@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState, type ReactNode } from 'react';
 import { signOut, useSession } from 'next-auth/react';
-import { FiDollarSign, FiGrid, FiLogOut, FiUploadCloud, FiBox, FiShield, FiUsers, FiImage, FiMessageSquare } from 'react-icons/fi';
+import { FiDollarSign, FiGrid, FiLogOut, FiUploadCloud, FiBox, FiShield, FiUsers, FiImage, FiMessageSquare, FiHelpCircle } from 'react-icons/fi';
 
 const navItems = [
   { href: '/admin/dashboard', label: 'Overview', icon: FiGrid },
@@ -12,6 +12,7 @@ const navItems = [
   { href: '/admin/dashboard/team', label: 'Team', icon: FiUsers },
   { href: '/admin/dashboard/gallery', label: 'Gallery', icon: FiImage },
   { href: '/admin/dashboard/community', label: 'Testimonials', icon: FiMessageSquare },
+  { href: '/admin/dashboard/faq', label: 'FAQs', icon: FiHelpCircle },
   { href: '/admin/dashboard/salary-pricing', label: 'Salary Pricing', icon: FiDollarSign },
 ];
 
@@ -22,35 +23,37 @@ export default function AdminShell({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
   const { status } = useSession();
-  const [hasLocalToken, setHasLocalToken] = useState<boolean | null>(null);
+  const [mounted, setMounted] = useState(false);
+  const [hasLocalToken, setHasLocalToken] = useState(false);
 
   useEffect(() => {
-    const timer = window.setTimeout(() => {
-      setHasLocalToken(Boolean(window.localStorage.getItem(TOKEN_KEY)));
-    }, 0);
-
-    return () => window.clearTimeout(timer);
+    const token = window.localStorage.getItem(TOKEN_KEY);
+    const valid = Boolean(token && token !== 'null' && token !== 'undefined');
+    setHasLocalToken(valid);
+    setMounted(true);
   }, []);
 
+  const isAuthenticated = hasLocalToken;
+
   useEffect(() => {
-    if (hasLocalToken === null || status === 'loading') {
+    if (!mounted) {
       return;
     }
 
-    if (!hasLocalToken && status !== 'authenticated') {
-      router.replace('/adminlogin');
+    if (!isAuthenticated) {
+      window.location.href = '/adminlogin';
     }
-  }, [hasLocalToken, router, status]);
-
-  const ready = hasLocalToken !== null && status !== 'loading' && (hasLocalToken || status === 'authenticated');
+  }, [mounted, isAuthenticated]);
 
   const handleLogout = () => {
     window.localStorage.removeItem(TOKEN_KEY);
     window.localStorage.removeItem(AUTH_KEY);
-    void signOut({ callbackUrl: '/adminlogin' });
+    void signOut({ redirect: false }).then(() => {
+      window.location.href = '/adminlogin';
+    });
   };
 
-  if (!ready) {
+  if (!mounted) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-[#050814] text-white">
         <div className="rounded-3xl border border-white/10 bg-white/5 px-6 py-4 text-sm text-white/70 backdrop-blur">

@@ -1,15 +1,17 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { AuroraText } from "../auroratext/Auroratext";
+import { GsapReveal, GsapStagger } from "../gsap/GsapAnimations";
 
 interface FAQItem {
-  id: number;
+  _id?: string;
+  id?: number;
   question: string;
   answer: string;
 }
 
-const faqs: FAQItem[] = [
+const initialFaqs: FAQItem[] = [
   {
     id: 1,
     question: "What technologies do you work with?",
@@ -20,7 +22,7 @@ const faqs: FAQItem[] = [
     id: 2,
     question: "Are you available for freelance projects?",
     answer:
-      "Yes! I'm open to freelance and contract work. Feel free to reach out via the contact section and we can discuss your project requirements, timeline, and budget.",
+      "Yes! I'm open to freelance and contract work. Feel free to reach out via the contact section or WhatsApp and we can discuss your project requirements, timeline, and budget.",
   },
   {
     id: 3,
@@ -39,12 +41,6 @@ const faqs: FAQItem[] = [
     question: "Can you work with an existing codebase?",
     answer:
       "Yes, I'm comfortable jumping into existing projects. I'll review the codebase, understand the architecture, and make improvements or additions while maintaining code quality and consistency.",
-  },
-  {
-    id: 6,
-    question: "What is your preferred way to communicate during a project?",
-    answer:
-      "I prefer async communication via Slack or email for day-to-day updates, with weekly video calls to review progress and plan the next sprint. I always keep clients in the loop with regular status updates.",
   },
 ];
 
@@ -102,13 +98,40 @@ const FAQAccordionItem: React.FC<{ item: FAQItem }> = ({ item }) => {
   );
 };
 
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:5000";
+
 export default function FAQSection() {
+  const [faqs, setFaqs] = useState<FAQItem[]>([]);
+
+  useEffect(() => {
+    const fetchFaqs = async () => {
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/faqs`);
+        if (response.ok) {
+          const json = await response.json();
+          if (json.data && json.data.length > 0) {
+            setFaqs(json.data);
+          } else {
+            setFaqs(initialFaqs);
+          }
+        } else {
+          setFaqs(initialFaqs);
+        }
+      } catch (error) {
+        console.error("Failed to fetch FAQs:", error);
+        setFaqs(initialFaqs);
+      }
+    };
+
+    fetchFaqs();
+  }, []);
+
   return (
     <div className="min-h-screen py-24 flex items-center justify-center px-4 sm:px-6 md:px-8">
       <div className="w-full max-w-[1400px] grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-start">
 
         {/* Left — sticky title */}
-        <div className="lg:sticky lg:top-24">
+        <GsapReveal direction="left" className="lg:sticky lg:top-24">
           <h2 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold leading-[1.05] tracking-[-0.04em] text-white">
             Frequently
             <br />
@@ -124,14 +147,14 @@ export default function FAQSection() {
             Have something on your mind? Here are answers to the most common
             questions clients ask before working with me.
           </p>
-        </div>
+        </GsapReveal>
 
-        {/* Right — accordion */}
-        <div className="w-full">
+        {/* Right — dynamic accordion */}
+        <GsapStagger className="w-full">
           {faqs.map((item) => (
-            <FAQAccordionItem key={item.id} item={item} />
+            <FAQAccordionItem key={item._id || item.id} item={item} />
           ))}
-        </div>
+        </GsapStagger>
       </div>
     </div>
   );

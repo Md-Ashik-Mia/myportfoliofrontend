@@ -5,7 +5,7 @@ import { AiOutlineDownload } from 'react-icons/ai';
 import { FaFacebookF, FaInstagram, FaLinkedinIn, FaTwitter } from 'react-icons/fa6';
 import { FiArrowRight } from 'react-icons/fi';
 import { SiGoogle } from 'react-icons/si';
-import { signIn } from 'next-auth/react';
+import { signIn, signOut, useSession } from 'next-auth/react';
 import TypingHeadline from '@/common/home/TypingHeadline';
 import ShimmerButton from '@/common/home/ShimmerButton';
 import NoiseCard from '@/common/noise-card/NoiseCard';
@@ -100,6 +100,8 @@ function NoiseActionButton({
 }
 
 export default function HeroSection() {
+  const { data: session } = useSession();
+
   return (
    <div className="flex flex-col  lg:min-h-[calc(100vh-1.5rem)]  ">
           <NoiseCard
@@ -111,9 +113,6 @@ export default function HeroSection() {
             <header className="flex items-center justify-between gap-4">
               <div className="flex items-center gap-3">
                 <Image src="/logo/ashiklogo.png" width={50} height={50} alt='logo'></Image>
-                {/* <div className="flex h-11 w-11 items-center justify-center rounded-full bg-[#2f62ff] shadow-[0_0_25px_rgba(47,98,255,0.35)]">
-                  <span className="block h-5 w-5 -rotate-45 rounded-full border-l-[8px] border-l-white border-y-[8px] border-y-transparent border-r-[8px] border-r-transparent" />
-                </div> */}
                 <div className="text-[1.6rem] font-bold leading-none tracking-[-0.03em] text-white sm:text-[1.8rem]">
                   It&apos;s ashik
                 </div>
@@ -128,14 +127,34 @@ export default function HeroSection() {
                     {item}
                   </NoiseBadge>
                 ))}
-                <NoiseActionButton
-                  ariaLabel="Sign in with Google"
-                  className="text-[11px] font-medium text-white/72 transition hover:-translate-y-0.5 hover:text-white"
-                  onClick={() => void signIn('google', { callbackUrl: '/admin/dashboard' })}
-                >
-                  <SiGoogle className="text-[11px]" />
-                  Google Login
-                </NoiseActionButton>
+
+                {session?.user ? (
+                  <div className="flex items-center gap-2">
+                    <NoiseBadge className="px-3 py-1 text-xs text-white/80 flex items-center gap-2">
+                      {session.user.image && (
+                        <img src={session.user.image} alt="User" className="w-5 h-5 rounded-full" />
+                      )}
+                      <span>{session.user.name?.split(' ')[0]}</span>
+                    </NoiseBadge>
+                    <NoiseActionButton
+                      ariaLabel="Sign out"
+                      className="text-[11px] font-medium text-white/72 transition hover:-translate-y-0.5 hover:text-white"
+                      onClick={() => void signOut()}
+                    >
+                      Logout
+                    </NoiseActionButton>
+                  </div>
+                ) : (
+                  <NoiseActionButton
+                    ariaLabel="Sign in with Google"
+                    className="text-[11px] font-medium text-white/72 transition hover:-translate-y-0.5 hover:text-white"
+                    onClick={() => void signIn('google', { callbackUrl: '/' })}
+                  >
+                    <SiGoogle className="text-[11px]" />
+                    Google Login
+                  </NoiseActionButton>
+                )}
+
                 <NoiseActionButton className="text-sm font-semibold text-white transition hover:-translate-y-0.5" onClick={() => {
                   window.location.hash = 'contact';
                 }}>
