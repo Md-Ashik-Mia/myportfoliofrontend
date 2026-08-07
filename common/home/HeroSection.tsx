@@ -108,8 +108,8 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:5
 export default function HeroSection() {
   const { data: session } = useSession();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [resumeUrl, setResumeUrl] = useState('/pdf/MyResume Ashik.pdf');
-  const [resumeFileName, setResumeFileName] = useState('MyResume Ashik.pdf');
+  const [resumeUrl, setResumeUrl] = useState<string>('');
+  const [resumeFileName, setResumeFileName] = useState<string>('Resume.pdf');
 
   useEffect(() => {
     const fetchResume = async () => {
@@ -119,9 +119,9 @@ export default function HeroSection() {
           const json = await res.json();
           if (json.data && json.data.fileUrl) {
             setResumeUrl(json.data.fileUrl);
-            if (json.data.fileName) {
-              setResumeFileName(json.data.fileName);
-            }
+            setResumeFileName(json.data.fileName || 'Resume.pdf');
+          } else {
+            setResumeUrl('');
           }
         }
       } catch (e) {
@@ -130,6 +130,7 @@ export default function HeroSection() {
     };
     void fetchResume();
   }, []);
+
 
 
   return (
@@ -320,12 +321,13 @@ export default function HeroSection() {
 
           <div className="mt-8 flex flex-wrap gap-4">
             <ShimmerButton
-              href={resumeUrl}
-              target="_blank"
-              download={resumeFileName}
+              href={resumeUrl || '#contact'}
+              target={resumeUrl ? '_blank' : '_self'}
+              download={resumeUrl ? resumeFileName : undefined}
               text="Resume"
               icon={<AiOutlineDownload className="text-xl" />}
             />
+
 
 
             <a
