@@ -1,11 +1,41 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
-import { FaFacebookF, FaInstagram, FaLinkedinIn, FaTwitter } from "react-icons/fa6";
+import { FaFacebookF, FaInstagram, FaLinkedinIn, FaTwitter, FaYoutube, FaGithub } from "react-icons/fa6";
 import NoiseCard from "@/common/noise-card/NoiseCard";
 
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:5000";
+
+interface SocialLinksData {
+  facebook?: string;
+  linkedin?: string;
+  instagram?: string;
+  youtube?: string;
+  github?: string;
+  twitter?: string;
+}
+
 export default function FooterSection() {
+  const [socialLinks, setSocialLinks] = useState<SocialLinksData>({});
+
+  useEffect(() => {
+    const fetchSocials = async () => {
+      try {
+        const res = await fetch(`${API_BASE_URL}/api/social-links`);
+        if (res.ok) {
+          const json = await res.json();
+          if (json.data) {
+            setSocialLinks(json.data);
+          }
+        }
+      } catch (e) {
+        console.error("Failed to fetch footer social links:", e);
+      }
+    };
+    void fetchSocials();
+  }, []);
+
   return (
     <footer className="pb-20 pt-8 px-4 sm:px-6 md:px-8 flex justify-center">
       <div className="w-full max-w-[1240px]">
@@ -69,36 +99,74 @@ export default function FooterSection() {
             </a>
           </nav>
 
-          {/* Social Media Icons */}
-          <div className="flex items-center justify-center gap-5 mb-6">
-            <a
-              href="#"
-              aria-label="Facebook Profile"
-              className="flex h-11 w-11 items-center justify-center rounded-full border border-[#164962]/40 bg-[#08101f]/80 text-white/60 hover:border-[#164962]/70 hover:bg-[#15223f] hover:text-white hover:-translate-y-0.5 shadow-[0_6px_18px_rgba(0,0,0,0.25)] transition duration-300"
-            >
-              <FaFacebookF size={14} />
-            </a>
-            <a
-              href="#"
-              aria-label="Instagram Profile"
-              className="flex h-11 w-11 items-center justify-center rounded-full border border-[#164962]/40 bg-[#08101f]/80 text-white/60 hover:border-[#164962]/70 hover:bg-[#15223f] hover:text-white hover:-translate-y-0.5 shadow-[0_6px_18px_rgba(0,0,0,0.25)] transition duration-300"
-            >
-              <FaInstagram size={14} />
-            </a>
-            <a
-              href="#"
-              aria-label="Twitter Profile"
-              className="flex h-11 w-11 items-center justify-center rounded-full border border-[#164962]/40 bg-[#08101f]/80 text-white/60 hover:border-[#164962]/70 hover:bg-[#15223f] hover:text-white hover:-translate-y-0.5 shadow-[0_6px_18px_rgba(0,0,0,0.25)] transition duration-300"
-            >
-              <FaTwitter size={14} />
-            </a>
-            <a
-              href="#"
-              aria-label="LinkedIn Profile"
-              className="flex h-11 w-11 items-center justify-center rounded-full border border-[#164962]/40 bg-[#08101f]/80 text-white/60 hover:border-[#164962]/70 hover:bg-[#15223f] hover:text-white hover:-translate-y-0.5 shadow-[0_6px_18px_rgba(0,0,0,0.25)] transition duration-300"
-            >
-              <FaLinkedinIn size={14} />
-            </a>
+          {/* Dynamic Social Media Icons */}
+          <div className="flex flex-wrap items-center justify-center gap-4 mb-6">
+            {Boolean(socialLinks.facebook?.trim()) && (
+              <a
+                href={socialLinks.facebook}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Facebook Profile"
+                className="flex h-11 w-11 items-center justify-center rounded-full border border-[#164962]/40 bg-[#08101f]/80 text-white/60 hover:border-blue-400 hover:bg-blue-500/20 hover:text-white hover:-translate-y-0.5 shadow-[0_6px_18px_rgba(0,0,0,0.25)] transition duration-300"
+              >
+                <FaFacebookF size={14} />
+              </a>
+            )}
+            {Boolean(socialLinks.linkedin?.trim()) && (
+              <a
+                href={socialLinks.linkedin}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="LinkedIn Profile"
+                className="flex h-11 w-11 items-center justify-center rounded-full border border-[#164962]/40 bg-[#08101f]/80 text-white/60 hover:border-cyan-400 hover:bg-cyan-500/20 hover:text-white hover:-translate-y-0.5 shadow-[0_6px_18px_rgba(0,0,0,0.25)] transition duration-300"
+              >
+                <FaLinkedinIn size={14} />
+              </a>
+            )}
+            {Boolean(socialLinks.instagram?.trim()) && (
+              <a
+                href={socialLinks.instagram}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Instagram Profile"
+                className="flex h-11 w-11 items-center justify-center rounded-full border border-[#164962]/40 bg-[#08101f]/80 text-white/60 hover:border-pink-400 hover:bg-pink-500/20 hover:text-white hover:-translate-y-0.5 shadow-[0_6px_18px_rgba(0,0,0,0.25)] transition duration-300"
+              >
+                <FaInstagram size={14} />
+              </a>
+            )}
+            {Boolean(socialLinks.youtube?.trim()) && (
+              <a
+                href={socialLinks.youtube}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="YouTube Channel"
+                className="flex h-11 w-11 items-center justify-center rounded-full border border-[#164962]/40 bg-[#08101f]/80 text-white/60 hover:border-red-400 hover:bg-red-500/20 hover:text-white hover:-translate-y-0.5 shadow-[0_6px_18px_rgba(0,0,0,0.25)] transition duration-300"
+              >
+                <FaYoutube size={14} />
+              </a>
+            )}
+            {Boolean(socialLinks.github?.trim()) && (
+              <a
+                href={socialLinks.github}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="GitHub Profile"
+                className="flex h-11 w-11 items-center justify-center rounded-full border border-[#164962]/40 bg-[#08101f]/80 text-white/60 hover:border-purple-400 hover:bg-purple-500/20 hover:text-white hover:-translate-y-0.5 shadow-[0_6px_18px_rgba(0,0,0,0.25)] transition duration-300"
+              >
+                <FaGithub size={14} />
+              </a>
+            )}
+            {Boolean(socialLinks.twitter?.trim()) && (
+              <a
+                href={socialLinks.twitter}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Twitter Profile"
+                className="flex h-11 w-11 items-center justify-center rounded-full border border-[#164962]/40 bg-[#08101f]/80 text-white/60 hover:border-sky-400 hover:bg-sky-500/20 hover:text-white hover:-translate-y-0.5 shadow-[0_6px_18px_rgba(0,0,0,0.25)] transition duration-300"
+              >
+                <FaTwitter size={14} />
+              </a>
+            )}
           </div>
 
           {/* Copyright Text */}
