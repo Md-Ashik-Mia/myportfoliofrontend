@@ -311,7 +311,9 @@ export default function HeroSection() {
       {/* Main Hero Content Grid */}
       <div className="grid flex-1 items-center gap-8 py-8 lg:grid-cols-[minmax(0,0.97fr)_minmax(410px,0.9fr)] lg:gap-12 xl:gap-16">
         <div className="max-w-135 pt-1">
-          <TypingHeadline />
+          <div className="min-h-[12rem] md:min-h-0">
+            <TypingHeadline />
+          </div>
 
           <div className="my-6 sm:my-7 flex flex-col gap-3 sm:gap-4">
             <div className="flex flex-wrap gap-2.5 sm:gap-4">
