@@ -109,11 +109,13 @@ export default function HeroSection() {
     <div className="flex flex-col lg:min-h-[calc(100vh-1.5rem)]">
       {/* Header Container */}
       <NoiseCard
-        className="relative z-50 rounded-[22px] border border-white/6 px-4 py-3 shadow-[0_12px_40px_rgba(0,0,0,0.18)] sm:px-6"
+        className="relative z-50 rounded-[22px] border border-white/6 px-4 py-3 shadow-[0_12px_40px_rgba(0,0,0,0.18)] sm:px-6 mt-3 sm:mt-5"
         bgColor="bg-[#0A0C11]/15"
         noiseOpacity={0.09}
         grainSize={1}
       >
+
+
         <header className="flex items-center justify-between gap-4">
           {/* Logo & Brand */}
           <div className="flex items-center gap-3">

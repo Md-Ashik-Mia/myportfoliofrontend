@@ -29,9 +29,9 @@ export default function Home() {
          <ContactSection />
          <FooterSection />
        </div>
-
       </NoiseCard>
     </main>
+
   );
 }
 
